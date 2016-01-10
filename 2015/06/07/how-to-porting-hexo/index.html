@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo移植 - Nodlee</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; 今天讨论话题是如何在两台电脑间进行Hexo博客的移植，在开始之前，确认两台设备上的Hexo环境配置ok。顺便提一下，在Git配置完成后，Gihub的SSK-KEY列表中应该有两个KEY。为了很方便的区分两台电脑，我们暂且称之为旧设备和新设备，在旧设备上已经更新博客有一段时间了，而新机器只是配置好环境，还没有写博客。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo移植">
+<meta property="og:url" content="http://nodlee.com/2015/06/07/how-to-porting-hexo/index.html">
+<meta property="og:site_name" content="Nodlee">
+<meta property="og:description" content="&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; 今天讨论话题是如何在两台电脑间进行Hexo博客的移植，在开始之前，确认两台设备上的Hexo环境配置ok。顺便提一下，在Git配置完成后，Gihub的SSK-KEY列表中应该有两个KEY。为了很方便的区分两台电脑，我们暂且称之为旧设备和新设备，在旧设备上已经更新博客有一段时间了，而新机器只是配置好环境，还没有写博客。">
+<meta property="og:image" content="http://7xjk0e.com1.z0.glb.clouddn.com/github-ssh-keys.png">
+<meta property="og:image" content="http://7xjk0e.com1.z0.glb.clouddn.com/github-new-repo.png">
+<meta property="og:image" content="http://7xjk0e.com1.z0.glb.clouddn.com/github-repo.png">
+<meta property="og:image" content="http://7xjk0e.com1.z0.glb.clouddn.com/git-push.png">
+<meta property="og:image" content="http://7xjk0e.com1.z0.glb.clouddn.com/github-source.png">
+<meta property="og:image" content="http://7xjk0e.com1.z0.glb.clouddn.com/git-untrackfile.png">
+<meta property="og:updated_time" content="2015-06-13T03:21:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo移植">
+<meta name="twitter:description" content="&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; 今天讨论话题是如何在两台电脑间进行Hexo博客的移植，在开始之前，确认两台设备上的Hexo环境配置ok。顺便提一下，在Git配置完成后，Gihub的SSK-KEY列表中应该有两个KEY。为了很方便的区分两台电脑，我们暂且称之为旧设备和新设备，在旧设备上已经更新博客有一段时间了，而新机器只是配置好环境，还没有写博客。">
+  
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/categories">Categories</a>
+        
+          <a class="main-nav-link" href="/tags">Tags</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://nodlee.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-how-to-porting-hexo" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Hexo移植
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2015/06/07/how-to-porting-hexo/" class="article-date">
+  <time datetime="2015-06-07T15:02:58.000Z" itemprop="datePublished">6月 7 2015</time>
+</a>
+      
+      
+        <div class="article-comment-link-wrap">
+          <a href="http://nodlee.com/2015/06/07/how-to-porting-hexo/#disqus_thread" class="article-comment-link">评论</a>
+        </div>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&nbsp; &nbsp; &nbsp; &nbsp; 今天讨论话题是如何在两台电脑间进行<a href="/hexo.io">Hexo</a>博客的移植，在开始之前，确认两台设备上的Hexo环境配置ok。顺便提一下，在Git配置完成后，Gihub的SSK-KEY列表中应该有两个KEY。为了很方便的区分两台电脑，我们暂且称之为旧设备和新设备，在旧设备上已经更新博客有一段时间了，而新机器只是配置好环境，还没有写博客。<br><a id="more"></a>  </p>
+<p><img src="http://7xjk0e.com1.z0.glb.clouddn.com/github-ssh-keys.png" alt=""></p>
+<p>##<strong>关于移植</strong></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; 在Hexo中，有三类资源：源文件(文章数据)、主题资源和配置文件，分别对应Hexo初始化目录中 <code>../source</code> 、<code>../themes</code> 和 <code>../_config.yml</code> 。他们是构成博客站点的核心内容，当两个站点的源文件、主题资源和配置文件一致时，可以把他们看作是相同的。对于博客的移植，关键就是保持这三类资源在两台设备上的一致性。其实具体操作也很简单，配置文件和主题资源在站点配置完成后变化不大，拷贝旧设备中的到新设备并替换原有文件就可以了。而源文件属于频繁更新，对它的处理有所不同，具体方法后面会提到。</p>
+<p>注意：如果主题文件和配置文件经常改动的同学，可以参照下面的方法，将主题资源和配置文件维护在Github。</p>
+<p>##<strong>处理写作</strong></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; 大家都知道，Hexo的博客站点文件是维护在Github上的，在发布新文章，修改或删除已有文章之后，hexo都是调用Git将更新后的站点文件上传至Github，这样就保证在网页中显示的内容永远是最新的。我们借鉴这一思路将源文件保存到云端(Github)并进行同步更新，从而替代直接拷贝。具体处理流程为：首先上传旧设备中的源文件到Github，然后抓取并替换新设备中的源文件。接下来，不论是在新设备还是旧设备中，写博客之前更新一下源文件，然后在更新后的基础上写文章，待发布完成之后，将新添加的内容上传到Github。如此往复，就可以轻松而且准确地在两台设备上更新博客了。对应的具体操作步骤如下： </p>
+<p>###<strong>添加源文件</strong><br>首先是在已经更新博客的设备上进行如下操作：  </p>
+<ol>
+<li>新建远程仓库(远程仓库是Git中得一个概念，这里简单地理解为Github中的一个文件夹)，Github-&gt;Repositories，点击new， 如下图：<br><img src="http://7xjk0e.com1.z0.glb.clouddn.com/github-new-repo.png" alt=""><br>输入仓库名称 <code>source</code>，点击 create repostry。<br><img src="http://7xjk0e.com1.z0.glb.clouddn.com/github-repo.png" alt=""><br>远程仓库 <code>source</code> 创建完成。接下来回到Hexo初始化文件夹。   </li>
+<li>进入source文件夹，右键，选择 Git bash。    </li>
+<li>输入命令 <code>git init</code> 初始化本地仓库。  </li>
+<li>输入命令 <code>git add .</code> 添加当前目录文件到暂存区域。   </li>
+<li>输入命令 <code>git commit -m &quot;&lt;备注信息&gt;&quot;</code> 提交至本地仓库。  </li>
+<li>输入命令 <code>git push -u origin master</code> 提交至远程仓库。<br>出现下面的提示信息，表示提交成功。现在回到Github，检查远程仓库文件<br><img src="http://7xjk0e.com1.z0.glb.clouddn.com/git-push.png" alt="">  </li>
+</ol>
+<p>查看source远程仓库，多出_posts文件夹，现在本地的源文件已经提交至远程仓库。<br><img src="http://7xjk0e.com1.z0.glb.clouddn.com/github-source.png" alt="">  </p>
+<p>###<strong>获取源文件</strong></p>
+<p>接下来是将Github中的源文件抓取到新设备的Hexo目录中，具体操作如下： </p>
+<ol>
+<li>进入hexo初始化目录，删除source文件夹(如果新设备中已经有文章数据，建议先备份，等抓取完成后，再拷贝到source文件夹中)，避免和远程仓库名字冲突。      </li>
+<li>右键，选择 git bash。  </li>
+<li>输入命令 <code>git clone http://github.com/&lt;username&gt;/source.git</code>克隆Github上的源文件到当前目录。<br>现在博客的源文件已经更新到新设备上了，我们测试一下，重新生成(<code>hexo generate</code>)、发布(<code>hexo deploy</code>),然后在网页端检查是否发布成功。</li>
+</ol>
+<p>###<strong>更新源文件</strong></p>
+<p>最后是将添加的博客同步到Github，具体操作如下：  </p>
+<ol>
+<li>输入命令 <code>hexo new post &quot;nodlee&quot;</code>创建文章，录入内容并保存。  </li>
+<li>进入 <code>source</code> 文件夹，右键，选择 Git bash.  </li>
+<li>输入命令 <code>git status</code>，查看本地仓库状态。如图：<br><img src="http://7xjk0e.com1.z0.glb.clouddn.com/git-untrackfile.png" alt=""><br>在状态报告中可以看到新建的 <code>nodlee.md</code> 文件出现在“Untracked files”下面。未跟踪的文件意味着Git在之前的提交中没有这些文件。  </li>
+<li>输入命令 <code>git add &quot;nodlee.md&quot;</code>。  添加新文章到暂存区域。  </li>
+<li>输入命令 <code>git commit -m &quot;&lt;备注信息&gt;&quot;</code> 提交新添加的文章至本地仓库。    </li>
+<li>输入命令 <code>git push -u origin master</code> 提交至远程仓库。   </li>
+</ol>
+<p>回到Github检查新添加的文章是否添加成功。到目前为止，博客移植的主要三个操作已经介绍完毕。简单回顾下整个流程：第一步是上传旧设备中的源文件到Github中。第二步是获取Github上源文件。第三步开始写作，撰写文章，生成站点文件然后发布，更新源文件到Github。  </p>
+<p>不论是在旧设备还是新设备，每次在写作前记得先抓取远程数据更新到本地，写作完成后更新新内容到远程，慢慢的养成更新习惯。  </p>
+<p>##<strong>遇到的问题</strong><br>1、<code>hexo deploy</code> 出现 <code>deployer not found:github</code><br>在hexo更新到3.0之后，<code>deploy</code> 的 <code>type</code> 需要改成 <code>git</code>。如果没有安装Git发布工具，使用 <code>npm</code> 命令安装：<br><code>npm install hexo-deployer-git --save</code> 。<br>最后清除工程(<code>hexo clean</code>)，重新生成(<code>hexo generate</code>)、发布文件(<code>hexo deploy</code>)，检查是否发布成功。  </p>
+<p>2、<code>hexo deploy</code> 出现 <code>SSH：connect to host github.com port 22 timed out</code><br>检查 <code>_config.yml</code> 中 <code>repo</code>，如果是 <code>git@github.com:&lt;username&gt;/vernonlee.github.io.git</code> 则修改为 <code>http://&lt;username&gt;/vernonlee.github.io.git</code>。  </p>
+
+      
+    </div>
+  
+    <footer class="article-footer">
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
+
+    </footer>
+  
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/01/10/android-loop-viewpager/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-title"><span>&lt;</span>&nbsp;
+        
+          让ViewPager动起来
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+<script>
+  var disqus_shortname = 'nodlee';
+  
+  var disqus_url = 'http://nodlee.com/2015/06/07/how-to-porting-hexo/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
