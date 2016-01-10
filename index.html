@@ -79,36 +79,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>目前常用的软件，比如知乎日报，简书等都可以看到顶部图片有自动播放效果，对于这种效果有个专有名词，称之为”轮播“。第一次接触”轮播“的时候感觉很神奇，很酷。很想知道它是内部原理是什么，经过一番摸索终于搞懂并整理出这篇心得分享给大家，希望通过这篇文章帮助大家了解“轮播”内部原理，让ViewPager动起来。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">知乎日报</th>
-<th style="text-align:center">简书</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-<p><img src="http://7xjk0e.com1.z0.glb.clouddn.com/zhihu.gif" alt="知乎日报">|<img src="http://7xjk0e.com1.z0.glb.clouddn.com/jianshu.gif" alt="简书">|</p>
-<p>####原理分析<br>这一小节主要讲述“轮播”内部实现原理，具体实现过程在下一小节。首先从字面意思开始，“轮播”其实就是自动播放的意思。它包含“自动“和”播放“两部分：前者是事件，后者是事件执行的动作。事件的本体是一个定时任务，而事件的动作就是设置ViewPager跳转到指定页面。<strong>在每隔一段时间（定时任务事件）</strong> 执行 <strong>页面跳转操作（动作）</strong> 就是”轮播“效果的实现原理。下面我会从定时任务和页面跳转操作两部分做详细介绍。</p>
-<p>####定时任务<br>定时任务的详细介绍不属于本篇讲解范畴，这里只做简单介绍。更多详情，请大家自行Google。由于定时任务在软件开发中用得较多，实现方式有很多种，没法办把他们一一列出来作介绍，本篇采用Handler+Runnable组合作为案例。感兴趣的朋友也可以用其他实现方式作为替代。完成后的代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MainActivity extends AppCompatActivity &#123;&#10;    /** &#36718;&#25773;&#26102;&#38388;&#38388;&#38548; */&#10;    private static final int LOOP_INTERVAL = 3000;&#10;    ...&#10;    &#10;    private Handler mHandler;&#10;&#10;    @Override&#10;    protected void onCreate(Bundle savedInstanceState) &#123;&#10;        super.onCreate(savedInstanceState);&#10;        setContentView(R.layout.activity_main);&#10;        mHandler = new Handler();&#10;&#9;&#9;&#10;&#9;&#9;...        &#10;    &#125;&#10;&#10;&#9;@Override&#10;    protected void onStart() &#123;&#10;        super.onStart();&#10;        startLoopTask();&#10;    &#125;&#10;&#10;    private void startLoopTask() &#123;&#10;        mHandler.postDelayed(loopTask, LOOP_INTERVAL);&#10;    &#125;&#10;&#10;    @Override&#10;    protected void onStop() &#123;&#10;        super.onStop();&#10;        stopLoopTask();&#10;    &#125;&#10;&#10;&#9;private void stopLoopTask() &#123;&#10;        mHandler.removeCallbacks(loopTask);&#10;    &#125;&#10;&#10;    private Runnable loopTask = new Runnable() &#123;&#10;        @Override&#10;        public void run() &#123;&#10;        &#9;next();&#10;            mHandler.postDelayed(this, LOOP_INTERVAL);&#10;        &#125;&#10;    &#125;;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>“轮播”效果在用户看到应用界面后启动，看不到应用界面后关闭。所以把启动定时任务的方法startLoopTask()和关闭定时任务的方法stopLoopTask()放到Activity的生命周期onStart()和onStop()中。</p>
-<p>在startLoopTask()方法中，调用mHandler的postDelayed()方法发送任务loopTask到消息队列，经过设定的延迟时间LOOP_INTERVAL后，loopTask被执行。  </p>
-<p>在stopLoopTask()方法中，调用mHandler的removeCallbacks()方法将正在等待被执行的任务loopTask从消息队列中移除，从而达到“关闭“任务的效果。  </p>
-<p>在loopTask内部有两个操作，第一个先不用管，我们后面介绍。另外一个操作是之前提到的启动定时任务，可能有些人会问，为什么要重启本身呢，这样做有什么意义？这就要从Handler + Runnable实现定时任务的内部原理说起：</p>
-<blockquote>
-<p>在 <strong>任务内部重新启动任务</strong> 是Handler+Runnable组合实现定时任务的核心。从字面意思理解可能有点困难，我们用生活中例子对比理解一下：生活中大家都见过火车吧。现在我们假设火车的每一节车厢是一个任务。而连接火车与火车之间的钩子就是”任务内部重新启动任务“，什么意思呢？钩子的作用是保持火车厢之间的连贯性，而”任务内部重新启动任务“的作用也是一样，保持任务与任务之间的连贯性，好让他们看起来是循环的，不间断地，一个任务执行完成后通过”钩子“又到了下一个任务，以此往复循环，就实现了定时任务。  </p>
-</blockquote>
-<p>####页面跳转</p>
-<p>这一小节介绍事件的动作：页面跳转操作。也就是任务内部中的next()方法。先看一下它实现代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void next() &#123;&#10;    int currentPosition = mGalleryViewPager.getCurrentItem();&#10;    if (currentPosition != mAdapter.getCount() - 1) &#123;&#10;        currentPosition += 1;&#10;    &#125; else &#123;&#10;        currentPosition = 0;&#10;    &#125;&#10;&#10;    mGalleryViewPager.setCurrentItem(currentPosition, true);&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>在方法开头，先拿到ViewPager当前位置赋值给currentPosition，然后对它进行判断，如果不是最后一页，调用ViewPager的setCurrentItem()方法跳转到（currentPosition+1）页，也就是<br>当前ViewPager的下一页。如果当前页是ViewPager的尾页，将currentPosition置0，调用setCurrentItem()方法跳转至（0）页，也就是ViewPager的首页。setCurrentItem的第二个参数表示页面跳转是否有过渡动画。</p>
-<p>以上部分只是对“轮播”原理做简单介绍，如有不懂的地方可以阅读完整代码帮助理解。完整源码<a href="https://github.com/VernonLee/Android-LoopViewPager" target="_blank" rel="external">戳这里</a></p>
-
+        
+          <p class="article-more-link">
+            <a href="/2016/01/10/android-loop-viewpager/#more">阅读全文</a>
+          </p>
+        
       
     </div>
   

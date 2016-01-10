@@ -5,63 +5,16 @@
   
   <title>让ViewPager动起来 - Nodlee</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="目前常用的软件，比如知乎日报，简书等都可以看到顶部图片有自动播放效果，对于这种效果有个专有名词，称之为”轮播“。第一次接触”轮播“的时候感觉很神奇，很酷。很想知道它是内部原理是什么，经过一番摸索终于搞懂并整理出这篇心得分享给大家，希望通过这篇文章帮助大家了解“轮播”内部原理，让ViewPager动起来。
-
-
-
-知乎日报
-简书
-
-
-
-
-
-
-
-
-||
-####原理分析这一小节主要讲述“轮播”内部实现原">
+  <meta name="description" content="目前常用的软件，比如知乎日报，简书等都可以看到顶部图片有自动播放效果，对于这种效果有个专有名词，称之为”轮播“。第一次接触”轮播“的时候感觉很神奇，很酷。很想知道它是内部原理是什么，经过一番摸索终于搞懂并整理出这篇心得分享给大家，希望通过这篇文章帮助大家了解“轮播”内部原理，让ViewPager动起来。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="让ViewPager动起来">
 <meta property="og:url" content="http://nodlee.com/2016/01/10/android-loop-viewpager/index.html">
 <meta property="og:site_name" content="Nodlee">
-<meta property="og:description" content="目前常用的软件，比如知乎日报，简书等都可以看到顶部图片有自动播放效果，对于这种效果有个专有名词，称之为”轮播“。第一次接触”轮播“的时候感觉很神奇，很酷。很想知道它是内部原理是什么，经过一番摸索终于搞懂并整理出这篇心得分享给大家，希望通过这篇文章帮助大家了解“轮播”内部原理，让ViewPager动起来。
-
-
-
-知乎日报
-简书
-
-
-
-
-
-
-
-
-||
-####原理分析这一小节主要讲述“轮播”内部实现原">
-<meta property="og:image" content="http://7xjk0e.com1.z0.glb.clouddn.com/zhihu.gif">
-<meta property="og:image" content="http://7xjk0e.com1.z0.glb.clouddn.com/jianshu.gif">
-<meta property="og:updated_time" content="2016-01-10T13:52:25.000Z">
+<meta property="og:description" content="目前常用的软件，比如知乎日报，简书等都可以看到顶部图片有自动播放效果，对于这种效果有个专有名词，称之为”轮播“。第一次接触”轮播“的时候感觉很神奇，很酷。很想知道它是内部原理是什么，经过一番摸索终于搞懂并整理出这篇心得分享给大家，希望通过这篇文章帮助大家了解“轮播”内部原理，让ViewPager动起来。">
+<meta property="og:updated_time" content="2016-01-10T14:15:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="让ViewPager动起来">
-<meta name="twitter:description" content="目前常用的软件，比如知乎日报，简书等都可以看到顶部图片有自动播放效果，对于这种效果有个专有名词，称之为”轮播“。第一次接触”轮播“的时候感觉很神奇，很酷。很想知道它是内部原理是什么，经过一番摸索终于搞懂并整理出这篇心得分享给大家，希望通过这篇文章帮助大家了解“轮播”内部原理，让ViewPager动起来。
-
-
-
-知乎日报
-简书
-
-
-
-
-
-
-
-
-||
-####原理分析这一小节主要讲述“轮播”内部实现原">
+<meta name="twitter:description" content="目前常用的软件，比如知乎日报，简书等都可以看到顶部图片有自动播放效果，对于这种效果有个专有名词，称之为”轮播“。第一次接触”轮播“的时候感觉很神奇，很酷。很想知道它是内部原理是什么，经过一番摸索终于搞懂并整理出这篇心得分享给大家，希望通过这篇文章帮助大家了解“轮播”内部原理，让ViewPager动起来。">
   
   
   <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
@@ -126,20 +79,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>目前常用的软件，比如知乎日报，简书等都可以看到顶部图片有自动播放效果，对于这种效果有个专有名词，称之为”轮播“。第一次接触”轮播“的时候感觉很神奇，很酷。很想知道它是内部原理是什么，经过一番摸索终于搞懂并整理出这篇心得分享给大家，希望通过这篇文章帮助大家了解“轮播”内部原理，让ViewPager动起来。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">知乎日报</th>
-<th style="text-align:center">简书</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-<p><img src="http://7xjk0e.com1.z0.glb.clouddn.com/zhihu.gif" alt="知乎日报">|<img src="http://7xjk0e.com1.z0.glb.clouddn.com/jianshu.gif" alt="简书">|</p>
+<a id="more"></a>  
 <p>####原理分析<br>这一小节主要讲述“轮播”内部实现原理，具体实现过程在下一小节。首先从字面意思开始，“轮播”其实就是自动播放的意思。它包含“自动“和”播放“两部分：前者是事件，后者是事件执行的动作。事件的本体是一个定时任务，而事件的动作就是设置ViewPager跳转到指定页面。<strong>在每隔一段时间（定时任务事件）</strong> 执行 <strong>页面跳转操作（动作）</strong> 就是”轮播“效果的实现原理。下面我会从定时任务和页面跳转操作两部分做详细介绍。</p>
 <p>####定时任务<br>定时任务的详细介绍不属于本篇讲解范畴，这里只做简单介绍。更多详情，请大家自行Google。由于定时任务在软件开发中用得较多，实现方式有很多种，没法办把他们一一列出来作介绍，本篇采用Handler+Runnable组合作为案例。感兴趣的朋友也可以用其他实现方式作为替代。完成后的代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MainActivity extends AppCompatActivity &#123;&#10;    /** &#36718;&#25773;&#26102;&#38388;&#38388;&#38548; */&#10;    private static final int LOOP_INTERVAL = 3000;&#10;    ...&#10;    &#10;    private Handler mHandler;&#10;&#10;    @Override&#10;    protected void onCreate(Bundle savedInstanceState) &#123;&#10;        super.onCreate(savedInstanceState);&#10;        setContentView(R.layout.activity_main);&#10;        mHandler = new Handler();&#10;&#9;&#9;&#10;&#9;&#9;...        &#10;    &#125;&#10;&#10;&#9;@Override&#10;    protected void onStart() &#123;&#10;        super.onStart();&#10;        startLoopTask();&#10;    &#125;&#10;&#10;    private void startLoopTask() &#123;&#10;        mHandler.postDelayed(loopTask, LOOP_INTERVAL);&#10;    &#125;&#10;&#10;    @Override&#10;    protected void onStop() &#123;&#10;        super.onStop();&#10;        stopLoopTask();&#10;    &#125;&#10;&#10;&#9;private void stopLoopTask() &#123;&#10;        mHandler.removeCallbacks(loopTask);&#10;    &#125;&#10;&#10;    private Runnable loopTask = new Runnable() &#123;&#10;        @Override&#10;        public void run() &#123;&#10;        &#9;next();&#10;            mHandler.postDelayed(this, LOOP_INTERVAL);&#10;        &#125;&#10;    &#125;;&#10;&#125;</span><br></pre></td></tr></table></figure>
