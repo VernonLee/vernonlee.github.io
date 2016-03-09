@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://nodlee.com/2016/03/09/choose-a-license/</loc>
+    <lastmod>2016-03-09T14:49:07.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://nodlee.com/2015/06/07/how-to-porting-hexo/</loc>
     <lastmod>2016-02-01T14:36:54.000Z</lastmod>
   </url>
