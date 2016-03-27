@@ -2,8 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://nodlee.com/2016/03/27/design-pattern-factory-method/</loc>
+    <lastmod>2016-03-27T15:08:21.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://nodlee.com/2016/03/09/choose-a-license/</loc>
-    <lastmod>2016-03-09T14:49:07.000Z</lastmod>
+    <lastmod>2016-03-09T14:49:15.000Z</lastmod>
   </url>
   
   <url>
