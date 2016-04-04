@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Nodlee">
 <meta property="og:description" content="&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;工厂方法属于设计模式中抽象工厂的一部分，在Android源码中用的比较多，所以单独拿出来讨论。 结合源码中的几个例子，稍加分析，加深自己对工厂方法的理解。">
 <meta property="og:image" content="http://7xjk0e.com1.z0.glb.clouddn.com/uml_factory_method.png">
-<meta property="og:updated_time" content="2016-04-04T02:39:07.000Z">
+<meta property="og:updated_time" content="2016-04-04T02:41:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android源码中的设计模式之工厂方法">
 <meta name="twitter:description" content="&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;工厂方法属于设计模式中抽象工厂的一部分，在Android源码中用的比较多，所以单独拿出来讨论。 结合源码中的几个例子，稍加分析，加深自己对工厂方法的理解。">
@@ -107,12 +107,12 @@
 <a id="more"></a>  
 <h2 id="u5B9A_u4E49"><a href="#u5B9A_u4E49" class="headerlink" title="定义"></a>定义</h2><p>&nbsp; &nbsp; &nbsp; &nbsp; 工厂方法模式定义了一个创建对象的接口，由子类决定具体实例化的类是哪一个。关于让子类决定的含义，指的是父类中做了定义，但是具体实现是在子类中。“决定”并不是指模式允许子类本身运行时做决定，而是指编写创建类时，不需要知道实际创建的产品是哪一个，父类选择了使用哪个子类，自然就决定了实际创建的产品是什么。</p>
 <h3 id="UML_u7C7B_u56FE"><a href="#UML_u7C7B_u56FE" class="headerlink" title="UML类图"></a>UML类图</h3><p><img src="http://7xjk0e.com1.z0.glb.clouddn.com/uml_factory_method.png" height="400" width="600"></p>
-<h2 id="u6E90_u7801_u4E2D_u7684_u5DE5_u5382_u65B9_u6CD5"><a href="#u6E90_u7801_u4E2D_u7684_u5DE5_u5382_u65B9_u6CD5" class="headerlink" title="源码中的工厂方法"></a>源码中的工厂方法</h2><h4 id="Socket/SocketFactory/SSLSocket/SSLSocketFactory"><a href="#Socket/SocketFactory/SSLSocket/SSLSocketFactory" class="headerlink" title="Socket/SocketFactory/SSLSocket/SSLSocketFactory"></a>Socket/SocketFactory/SSLSocket/SSLSocketFactory</h4><p>&nbsp; &nbsp; &nbsp; &nbsp; 前面的UML类图是根据Socket/SocketFactory画的，下面是他们的源码（已省略注释和其他不相关的方法）：</p>
+<h2 id="u6E90_u7801_u4E2D_u7684_u5DE5_u5382_u65B9_u6CD5"><a href="#u6E90_u7801_u4E2D_u7684_u5DE5_u5382_u65B9_u6CD5" class="headerlink" title="源码中的工厂方法"></a>源码中的工厂方法</h2><h4 id="Socket/SocketFactory/SSLSocket/SSLSocketFactory"><a href="#Socket/SocketFactory/SSLSocket/SSLSocketFactory" class="headerlink" title="Socket/SocketFactory/SSLSocket/SSLSocketFactory"></a>Socket/SocketFactory/SSLSocket/SSLSocketFactory</h4><p>前面的UML类图是根据Socket/SocketFactory画的，下面是他们的源码（已省略注释和其他不相关的方法）：</p>
 <p>SocketFactory.java</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SocketFactory</span> </span>&#123;</span><br><span class="line">    <span class="function">Socket <span class="title">createSocket</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>SSLSocketFactory.java</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SSLSocketFactory</span> <span class="keyword">implements</span> <span class="title">LayeredSocketFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Socket <span class="title">createSocket</span><span class="params">(<span class="keyword">final</span> Socket socket, <span class="keyword">final</span> String host, <span class="keyword">final</span> <span class="keyword">int</span> port, <span class="keyword">final</span> <span class="keyword">boolean</span> autoClose)</span> <span class="keyword">throws</span> IOException, UnknownHostException </span>&#123;</span><br><span class="line">        SSLSocket sslSocket = (SSLSocket) <span class="keyword">this</span>.socketfactory.createSocket(socket, host, port, autoClose);</span><br><span class="line">        sslSocket.startHandshake();</span><br><span class="line">        hostnameVerifier.verify(host, sslSocket);</span><br><span class="line">        <span class="keyword">return</span> sslSocket;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; LayeredSocketFactory继承自SocketFactory，这里为了代码结构简单一点，做了省略。</p>
+<p>LayeredSocketFactory继承自SocketFactory，这里为了代码结构简单一点，做了省略。</p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp; 可能有人不熟悉Socket，这里简单介绍下，Socket两个主机之间的连接，他们之间可以通过Socket收发数据。像目前经常用到的HttpUrlConnection，就是基于Socket封装的。SSLSocket通信是对Socket通信的的拓展，在Socket通信的基础上添加了一层安全性保护，提供了更高的安全性，包括身份验证、数据加密以及完整性验证。</p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp; 在工厂方法模式中，SocketFactory是创建者接口，他定义了一个工厂方法createSocket()，让子类实现此方法创建产品Socket。SSLSocketFactory实现SocketFactory接口，重写createSocket()方法创建SSLSocket。</p>
 <h4 id="Calendar"><a href="#Calendar" class="headerlink" title="Calendar"></a>Calendar</h4><p>Calendar.java</p>
@@ -130,7 +130,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://nodlee.com/2016/03/27/design-pattern-factory-method/" data-id="cimldrfoa0003giwb00gcbc2v" class="article-share-link">Share</a>
+      <a data-url="http://nodlee.com/2016/03/27/design-pattern-factory-method/" data-id="cimlecrg10003wxwbbs27d0oh" class="article-share-link">Share</a>
       
         <a href="http://nodlee.com/2016/03/27/design-pattern-factory-method/#disqus_thread" class="article-comment-link">留言</a>
       
