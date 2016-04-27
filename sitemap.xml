@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://nodlee.com/2016/04/27/design-pattern-abstract-factory-md/</loc>
+    <lastmod>2016-04-27T14:04:16.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://nodlee.com/2016/03/27/design-pattern-factory-method/</loc>
     <lastmod>2016-04-04T02:41:41.000Z</lastmod>
   </url>
